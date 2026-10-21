@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#F8FAFC">
+
+    <!-- Header -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="60dp" android:background="#1E3A8A" android:gravity="center_vertical" android:padding="16dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EasySaturdays" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Hero Section -->
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Empowering Tembisa Together" android:textSize="28sp" android:textStyle="bold" android:textColor="#1E3A8A" android:gravity="center" android:layout_marginTop="20dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Join The Easy Saturdays Foundation in driving social upliftment through community support, education, and youth empowerment in Ekurhuleni." android:textSize="16sp" android:textColor="#64748B" android:gravity="center" android:layout_marginTop="12dp"/>
+
+            <!-- Stats -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="School Shoes Distributed: 1,200+" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="24dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Winter Hampers Delivered: 850+" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="8dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Volunteers: 200+" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="8dp"/>
+
+            <!-- Actions -->
+            <Button android:id="@+id/btnViewCampaigns" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="View Campaigns" android:backgroundTint="#F59E0B" android:layout_marginTop="32dp"/>
+            <Button android:id="@+id/btnLoginRegister" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Login / Register" android:backgroundTint="#1E3A8A" android:layout_marginTop="12dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

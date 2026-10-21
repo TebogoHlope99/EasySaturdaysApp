@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAFC">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="👤 Edit Profile" android:textSize="24sp" android:textStyle="bold" android:textColor="#1E3A8A" android:gravity="center"/>
+
+        <EditText android:id="@+id/etProfFirstName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="First Name" android:layout_marginTop="20dp"/>
+        <EditText android:id="@+id/etProfLastName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Last Name" android:layout_marginTop="8dp"/>
+        <EditText android:id="@+id/etProfEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Email" android:enabled="false" android:layout_marginTop="8dp"/>
+        <EditText android:id="@+id/etProfPhone" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Phone Number" android:inputType="phone" android:layout_marginTop="8dp"/>
+        <EditText android:id="@+id/etProfSkills" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Skills (e.g. Event Coordination)" android:layout_marginTop="8dp"/>
+
+        <Button android:id="@+id/btnSaveProfile" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Save Changes" android:backgroundTint="#1E3A8A" android:layout_marginTop="24dp"/>
+        <Button android:id="@+id/btnCancelProfile" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cancel" android:backgroundTint="#64748B" android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView>

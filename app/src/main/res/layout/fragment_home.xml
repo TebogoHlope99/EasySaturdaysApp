@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg_light">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+        <!-- Hero Banner -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/primary"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Empowering "
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" Tembisa " android:textColor="@color/secondary" android:textSize="28sp" android:textStyle="bold" android:gravity="center"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="  Together" android:textColor="@color/white" android:textSize="28sp" android:textStyle="bold" android:gravity="center"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Join The Easy Saturdays Foundation in driving social upliftment through community support, education, and youth empowerment in Ekurhuleni." android:textColor="#E2E8F0" android:textSize="16sp" android:gravity="center" android:layout_marginTop="12dp"/>
+
+            <Button
+                android:id="@+id/btnViewCampaignsFromHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Campaigns"
+                android:background="@drawable/bg_button_success"
+                android:textColor="@color/white"
+                android:layout_marginTop="24dp"/>
+        </LinearLayout>
+
+        <!-- Stats Cards Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:layout_marginTop="-40dp"> <!-- Pulls cards up over the banner -->
+
+            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:background="@drawable/bg_card" android:orientation="vertical" android:padding="12dp" android:gravity="center" android:layout_marginEnd="8dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SHOES" android:textSize="10sp" android:textColor="@color/text_muted"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1,200+" android:textSize="20sp" android:textStyle="bold" android:textColor="@color/primary"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:background="@drawable/bg_card" android:orientation="vertical" android:padding="12dp" android:gravity="center" android:layout_marginEnd="8dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HAMPER" android:textSize="10sp" android:textColor="@color/text_muted"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="850+" android:textSize="20sp" android:textStyle="bold" android:textColor="@color/primary"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:background="@drawable/bg_card" android:orientation="vertical" android:padding="12dp" android:gravity="center">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="VOLUNTEER" android:textSize="10sp" android:textColor="@color/text_muted"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="200+" android:textSize="20sp" android:textStyle="bold" android:textColor="@color/primary"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+
+

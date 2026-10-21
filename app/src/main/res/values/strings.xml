@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">EasySaturdaysApp</string>
+    <string name="easysaturdays">EasySaturdays</string>
+    <string name="active_campaigns">Active Campaigns</string>
+    <string name="help_us_provide_school_shoes">Help us provide school shoes...</string>
+    <string name="raised_r0_goal_r50000">Raised: R0 / Goal: R50000</string>
+    <string name="donate">Donate</string>
+    <string name="back_2_school">Back 2 School</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="email_address">Email Address</string>
+    <string name="welcome_back">Welcome Back 👋</string>
+    <string name="first_name">First Name</string>
+    <string name="create_account">Create Account ✨</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="phone_e_g_0821234567">Phone (e.g. 0821234567)</string>
+    <string name="role">Role:</string>
+    <string name="register">Register</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
+    <string name="don_t_have_an_account_register_here">Don\'t have an account? Register here</string>
+</resources>
