@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,10 +45,14 @@ public class DashboardFragment extends Fragment {
                         tvTotalDonated.setText("R" + (int)data.totalDonated);
                         tvCampaigns.setText(String.valueOf(data.campaignsSupported));
                         tvHours.setText(String.valueOf(data.hoursContributed));
-                        tvUpcoming.setText(String.valueOf(data.upcomingShifts.size()));
 
-                        // Load shifts into RecyclerView
-                        shiftsRecyclerView.setAdapter(new ShiftAdapter(data.upcomingShifts));
+                        if (data.upcomingShifts != null) {
+                            tvUpcoming.setText(String.valueOf(data.upcomingShifts.size()));
+                            // Load shifts into RecyclerView
+                            shiftsRecyclerView.setAdapter(new ShiftAdapter(data.upcomingShifts));
+                        } else {
+                            tvUpcoming.setText("0");
+                        }
                     }
                 }
                 @Override
@@ -77,6 +82,46 @@ public class DashboardFragment extends Fragment {
             DashboardData.UpcomingShift s = list.get(position);
             holder.text1.setText(s.campaignTitle);
             holder.text2.setText(s.date + " | " + s.time);
+
+            // LONG PRESS TO CANCEL SHIFT
+            holder.itemView.setOnLongClickListener(v -> {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Cancel Shift")
+                        .setMessage("Are you sure you want to cancel your shift for " + s.campaignTitle + "? (You cannot cancel less than 24 hours before)")
+                        .setPositiveButton("Yes, Cancel", (d, w) -> {
+                            CancelShiftRequest req = new CancelShiftRequest();
+                            req.userId = User.currentUser.id;
+                            req.shiftId = s.id;
+
+                            ApiClient.getRetrofitInstance().create(ApiService.class).cancelShift(req).enqueue(new Callback<ApiResponse>() {
+                                @Override
+                                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                    if(response.isSuccessful()) {
+                                        Toast.makeText(getContext(), "Shift Cancelled Successfully", Toast.LENGTH_SHORT).show();
+                                        // Refresh the fragment to update the list
+                                        getParentFragmentManager().beginTransaction().detach(DashboardFragment.this).attach(DashboardFragment.this).commit();
+                                    } else {
+                                        // Try to parse the error message from the backend
+                                        try {
+                                            String errorBody = response.errorBody().string();
+                                            org.json.JSONObject json = new org.json.JSONObject(errorBody);
+                                            String cleanMessage = json.getString("message");
+                                            Toast.makeText(getContext(), cleanMessage, Toast.LENGTH_LONG).show();
+                                        } catch (Exception e) {
+                                            Toast.makeText(getContext(), "Cannot cancel: Less than 24 hours", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                    Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                return true;
+            });
         }
 
         @Override

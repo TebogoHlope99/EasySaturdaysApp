@@ -84,14 +84,20 @@ public class VolunteerFragment extends Fragment {
     }
 
     private void showShiftDialog(Campaign campaign) {
-        com.google.android.material.dialog.MaterialAlertDialogBuilder builder =
-                new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Volunteer for " + campaign.title);
 
         // Create a vertical layout for the dialog inputs
         android.widget.LinearLayout layout = new android.widget.LinearLayout(getContext());
         layout.setOrientation(android.widget.LinearLayout.VERTICAL);
         layout.setPadding(50, 40, 50, 10);
+
+        // DISCLAIMER
+        android.widget.TextView disclaimer = new android.widget.TextView(getContext());
+        disclaimer.setText("⚠️ Warning: You cannot cancel a shift less than 24 hours before it starts.");
+        disclaimer.setTextColor(android.graphics.Color.RED);
+        disclaimer.setPadding(0, 0, 0, 20);
+        layout.addView(disclaimer);
 
         // 1. Date Picker Button
         final android.widget.Button btnDate = new android.widget.Button(getContext());

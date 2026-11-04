@@ -18,6 +18,8 @@
             <group android:checkableBehavior="single">
                 <item android:id="@+id/nav_donate" android:title="Make a Donation" />
                 <item android:id="@+id/nav_volunteer" android:title="Volunteer Signup" />
+                <item android:id="@+id/nav_admin" android:title="Admin Panel" />
+                <item android:id="@+id/nav_super_admin" android:title="Super Admin Panel" />
             </group>
         </menu>
     </item>

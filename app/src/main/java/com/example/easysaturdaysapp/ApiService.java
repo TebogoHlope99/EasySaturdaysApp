@@ -31,4 +31,37 @@ public interface ApiService {
 
     @POST("api/donate")
     Call<ApiResponse> donate(@Body DonateRequest request);
+
+    // --- ADMIN ENDPOINTS ---
+    @GET("api/admin/users")
+    Call<List<AdminUser>> getAllUsers();
+
+    @GET("api/admin/donations")
+    Call<List<AdminDonation>> getAllDonations();
+
+    @GET("api/admin/shifts")
+    Call<List<AdminShift>> getAllShifts();
+
+    @GET("api/admin/reports")
+    Call<AdminReport> getReports();
+
+    @POST("api/admin/campaign/create")
+    Call<ApiResponse> createCampaign(@Body Campaign campaign);
+
+    @POST("api/admin/campaign/edit")
+    Call<ApiResponse> editCampaign(@Body Campaign campaign);
+
+    @POST("api/admin/campaign/delete/{id}")
+    Call<ApiResponse> deleteCampaign(@Path("id") int id);
+
+    @POST("api/admin/user/delete/{id}")
+    Call<ApiResponse> deleteUser(@Path("id") int id);
+
+    // SUPER ADMIN Endpoints
+    @POST("api/superadmin/request")
+    Call<ApiResponse> createAdminRequest(@Body AdminRequest request);
+    @GET("api/superadmin/requests")
+    Call<List<AdminRequest>> getAdminRequests();
+    @POST("api/superadmin/process")
+    Call<ApiResponse> processAdminRequest(@Body ProcessRequest process);
 }

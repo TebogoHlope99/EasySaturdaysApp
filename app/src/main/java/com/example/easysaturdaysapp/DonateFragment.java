@@ -82,8 +82,7 @@ public class DonateFragment extends Fragment {
     }
 
     private void showDonateDialog(Campaign campaign) {
-        com.google.android.material.dialog.MaterialAlertDialogBuilder builder =
-                new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Donate to " + campaign.title);
 
         // Create a vertical layout for the dialog inputs

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="16dp" android:background="#F8FAFC">
+
+    <!-- New Top Bar for Admin Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <!-- Existing Create Campaign Button -->
+        <Button
+            android:id="@+id/btnCreateCampaign"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+ Create Campaign"
+            android:backgroundTint="#10B981"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- NEW: Request Admin Action Button -->
+        <Button
+            android:id="@+id/btnRequestAdminAction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🛡️ Admin Request"
+            android:backgroundTint="#1E3A8A"/>
+    </LinearLayout>
+
+    <!-- Existing List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/adminCampaignRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
