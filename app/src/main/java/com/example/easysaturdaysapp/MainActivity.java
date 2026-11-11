@@ -22,18 +22,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Link UI elements
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvGoToRegister = findViewById(R.id.tvGoToRegister);
 
-        // Navigate to Registration Screen
         tvGoToRegister.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, RegisterActivity.class));
         });
 
-        // Handle Login Button Click
         btnLogin.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String pass = etPassword.getText().toString();
@@ -43,12 +40,10 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            // Create the request object
             User loginReq = new User();
             loginReq.email = email;
             loginReq.password = pass;
 
-            // Call the C# API
             ApiService api = ApiClient.getRetrofitInstance().create(ApiService.class);
             api.login(loginReq).enqueue(new Callback<User>() {
                 @Override
@@ -57,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
 
                         // 1. SAVE THE USER DATA GLOBALLY
-                        // This is crucial so the Navigation Drawer knows their Role (Donor/Volunteer/Admin)
                         User.currentUser = response.body();
 
-                        // 2. GO TO THE MAIN DRAWER (Not the old Dashboard Activity)
-                        startActivity(new Intent(MainActivity.this, MainDrawerActivity.class));
+                        // 2. GO TO THE MAIN DRAWER
+                        Intent intent = new Intent(MainActivity.this, MainDrawerActivity.class);
+                        startActivity(intent);
 
                         // 3. Close the login screen
                         finish();

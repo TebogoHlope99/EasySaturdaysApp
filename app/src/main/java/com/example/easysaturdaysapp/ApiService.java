@@ -8,6 +8,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ApiService {
+    // --- PUBLIC & USER ENDPOINTS ---
     @GET("api/campaigns")
     Call<List<Campaign>> getCampaigns();
 
@@ -57,11 +58,13 @@ public interface ApiService {
     @POST("api/admin/user/delete/{id}")
     Call<ApiResponse> deleteUser(@Path("id") int id);
 
-    // SUPER ADMIN Endpoints
+    // --- SUPER ADMIN ENDPOINTS ---
     @POST("api/superadmin/request")
     Call<ApiResponse> createAdminRequest(@Body AdminRequest request);
+
     @GET("api/superadmin/requests")
     Call<List<AdminRequest>> getAdminRequests();
+
     @POST("api/superadmin/process")
     Call<ApiResponse> processAdminRequest(@Body ProcessRequest process);
 }

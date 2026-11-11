@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="#F8FAFC" android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="🛡️ Admin Management" android:textSize="22sp" android:textStyle="bold" android:textColor="#1E3A8A" android:layout_marginBottom="16dp"/>
+
+    <!-- Request New Admin Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" app:cardCornerRadius="8dp" app:cardElevation="2dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="➕ Request New Admin" android:textStyle="bold" android:textSize="16sp" android:textColor="#10B981"/>
+            <EditText android:id="@+id/etNewAdminEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Enter new admin email" android:inputType="textEmailAddress" android:layout_marginTop="8dp"/>
+            <Button android:id="@+id/btnRequestCreate" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Submit Request" android:backgroundTint="#10B981" android:layout_marginTop="8dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Request Delete Admin Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp" app:cardElevation="2dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🗑️ Request Remove Admin" android:textStyle="bold" android:textSize="16sp" android:textColor="#EF4444"/>
+            <Spinner android:id="@+id/spinnerAdmins" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"/>
+            <Button android:id="@+id/btnRequestDelete" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Submit Request" android:backgroundTint="#EF4444" android:layout_marginTop="8dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

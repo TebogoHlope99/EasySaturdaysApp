@@ -30,80 +30,11 @@ public class AdminCampaignsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.adminCampaignRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Existing Create Campaign Button
+        // Only Create Campaign exists here now
         view.findViewById(R.id.btnCreateCampaign).setOnClickListener(v -> showCreateDialog());
-
-        // NEW: Admin Request Button
-        view.findViewById(R.id.btnRequestAdminAction).setOnClickListener(v -> showAdminRequestDialog());
 
         loadCampaigns();
         return view;
-    }
-
-    // --- ADMIN REQUEST DIALOG ---
-    private void showAdminRequestDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("🛡️ Request Admin Action");
-
-        android.widget.LinearLayout layout = new android.widget.LinearLayout(getContext());
-        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
-        layout.setPadding(50, 40, 50, 10);
-
-        // Dropdown to select Create or Delete
-        TextView label = new TextView(getContext());
-        label.setText("Select Action:");
-        layout.addView(label);
-
-        android.widget.Spinner actionSpinner = new android.widget.Spinner(getContext());
-        String[] actions = {"CreateAdmin", "DeleteAdmin"};
-        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, actions);
-        actionSpinner.setAdapter(adapter);
-        layout.addView(actionSpinner);
-
-        // Input for Email (only used for Create)
-        TextView label2 = new TextView(getContext());
-        label2.setText("\nNew Admin Email (leave blank for Delete):");
-        layout.addView(label2);
-
-        EditText etEmail = new EditText(getContext());
-        etEmail.setHint("e.g. newadmin@demo.com");
-        layout.addView(etEmail);
-
-        builder.setView(layout);
-
-        builder.setPositiveButton("Submit", (dialog, which) -> {
-            AdminRequest req = new AdminRequest();
-            req.actionType = actionSpinner.getSelectedItem().toString();
-
-            if(req.actionType.equals("CreateAdmin")) {
-                req.newAdminEmail = etEmail.getText().toString();
-                if(req.newAdminEmail.isEmpty()) {
-                    Toast.makeText(getContext(), "Email required for Create", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            } else {
-                // For delete, we would normally show a dropdown of admins.
-                // For simplicity in this demo, we'll hardcode ID 4 as an example.
-                req.targetAdminId = "4";
-            }
-
-            ApiClient.getRetrofitInstance().create(ApiService.class).createAdminRequest(req).enqueue(new Callback<ApiResponse>() {
-                @Override
-                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                    if(response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Request sent to Super Admin!", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getContext(), "Failed to send request", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onFailure(Call<ApiResponse> call, Throwable t) {
-                    Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
-                }
-            });
-        });
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
     }
 
     // --- CREATE DIALOG ---
@@ -145,15 +76,15 @@ public class AdminCampaignsFragment extends Fragment {
         layout.setPadding(50, 40, 50, 10);
 
         EditText etTitle = new EditText(getContext());
-        etTitle.setText(campaign.title); // Pre-fill with existing title
+        etTitle.setText(campaign.title);
         layout.addView(etTitle);
 
         EditText etDesc = new EditText(getContext());
-        etDesc.setText(campaign.description); // Pre-fill
+        etDesc.setText(campaign.description);
         layout.addView(etDesc);
 
         EditText etGoal = new EditText(getContext());
-        etGoal.setText(String.valueOf((int)campaign.goalAmount)); // Pre-fill
+        etGoal.setText(String.valueOf((int)campaign.goalAmount));
         etGoal.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         layout.addView(etGoal);
 
@@ -164,7 +95,7 @@ public class AdminCampaignsFragment extends Fragment {
             edited.title = etTitle.getText().toString();
             edited.description = etDesc.getText().toString();
             edited.goalAmount = Double.parseDouble(etGoal.getText().toString());
-            edited.raisedAmount = campaign.raisedAmount; // Keep the existing raised amount
+            edited.raisedAmount = campaign.raisedAmount;
 
             ApiService api = ApiClient.getRetrofitInstance().create(ApiService.class);
             api.editCampaign(edited).enqueue(new Callback<ApiResponse>() {
@@ -207,17 +138,14 @@ public class AdminCampaignsFragment extends Fragment {
             holder.text1.setText(c.title);
             holder.text2.setText("Raised: R" + (int)c.raisedAmount + " / Goal: R" + (int)c.goalAmount);
 
-            // LONG PRESS shows the Edit/Delete Menu
             holder.itemView.setOnLongClickListener(v -> {
                 String[] options = {"✏️ Edit", "🗑️ Delete"};
                 new AlertDialog.Builder(getContext())
                         .setTitle(c.title)
                         .setItems(options, (dialog, which) -> {
                             if (which == 0) {
-                                // Edit selected
                                 showEditDialog(c);
                             } else {
-                                // Delete selected
                                 new AlertDialog.Builder(getContext())
                                         .setTitle("Delete Campaign")
                                         .setMessage("Are you sure you want to delete this campaign?")

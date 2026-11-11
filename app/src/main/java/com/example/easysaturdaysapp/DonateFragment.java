@@ -2,19 +2,19 @@ package com.example.easysaturdaysapp;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+import java.util.UUID;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,73 +85,153 @@ public class DonateFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Donate to " + campaign.title);
 
-        // Create a vertical layout for the dialog inputs
         android.widget.LinearLayout layout = new android.widget.LinearLayout(getContext());
         layout.setOrientation(android.widget.LinearLayout.VERTICAL);
         layout.setPadding(50, 40, 50, 10);
 
         // 1. Amount Input
-        final android.widget.EditText input = new android.widget.EditText(getContext());
-        input.setHint("Enter amount (Min R50)");
-        input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        layout.addView(input);
+        final EditText etAmount = new EditText(getContext());
+        etAmount.setHint("Enter amount (Min R50)");
+        etAmount.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        layout.addView(etAmount);
 
         // 2. Payment Method Spinner
-        Spinner methodSpinner = new Spinner(getContext());
-        String[] methods = {"Credit Card", "Instant EFT", "Mobile Money", "Cash Drop-off"};
+        final Spinner methodSpinner = new Spinner(getContext());
+        String[] methods = {"Credit / Debit Card"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, methods);
         methodSpinner.setAdapter(adapter);
         layout.addView(methodSpinner);
 
-        // 3. Card Number Input (Hidden if Cash)
-        final android.widget.EditText cardInput = new android.widget.EditText(getContext());
-        cardInput.setHint("Card Number (16 digits)");
-        cardInput.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
-        layout.addView(cardInput);
+        // 3. Dynamic Container
+        final android.widget.LinearLayout dynamicContainer = new android.widget.LinearLayout(getContext());
+        dynamicContainer.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.addView(dynamicContainer);
 
-        // Toggle card visibility based on method
-        methodSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                if(methods[position].equals("Cash Drop-off")) {
-                    cardInput.setVisibility(View.GONE);
-                } else {
-                    cardInput.setVisibility(View.VISIBLE);
+        // 4. Card Details
+        final android.widget.LinearLayout cardLayout = new android.widget.LinearLayout(getContext());
+        cardLayout.setOrientation(android.widget.LinearLayout.VERTICAL);
+
+        final EditText etCardNumber = new EditText(getContext());
+        etCardNumber.setHint("Card Number (16 digits)");
+        etCardNumber.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        etCardNumber.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                String text = s.toString().replaceAll("\\s", "");
+                if (text.length() > 16) text = text.substring(0, 16);
+                String formatted = "";
+                for (int i = 0; i < text.length(); i++) {
+                    if (i > 0 && i % 4 == 0) formatted += " ";
+                    formatted += text.charAt(i);
+                }
+                if (!formatted.equals(s.toString())) {
+                    etCardNumber.setText(formatted);
+                    etCardNumber.setSelection(formatted.length());
                 }
             }
+        });
+        cardLayout.addView(etCardNumber);
+
+        final EditText etExpiry = new EditText(getContext());
+        etExpiry.setHint("Expiry (MM/YY)");
+        etExpiry.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        etExpiry.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                String text = s.toString().replaceAll("/", "");
+                if (text.length() > 4) text = text.substring(0, 4);
+                if (text.length() > 2) {
+                    String formatted = text.substring(0, 2) + "/" + text.substring(2);
+                    if (!formatted.equals(s.toString())) {
+                        etExpiry.setText(formatted);
+                        etExpiry.setSelection(formatted.length());
+                    }
+                }
+            }
+        });
+        cardLayout.addView(etExpiry);
+
+        final EditText etCvv = new EditText(getContext());
+        etCvv.setHint("CVV (3 digits)");
+        etCvv.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        cardLayout.addView(etCvv);
+
+        dynamicContainer.addView(cardLayout);
+
+        // 5. Handle Spinner Changes
+        methodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                dynamicContainer.removeAllViews();
+                String selectedMethod = methods[position];
+
+                if (selectedMethod.equals("Credit / Debit Card")) {
+                    dynamicContainer.addView(cardLayout);
+                }
+                /*else if (selectedMethod.equals("Cash")) {
+                    TextView tvCash = new TextView(getContext());
+                    tvCash.setText("A Reference Code will be emailed to you. Take it to the EasySaturdays office to verify your cash donation.");
+                    tvCash.setTextColor(android.graphics.Color.RED);
+                    tvCash.setPadding(0, 20, 0, 20);
+                    dynamicContainer.addView(tvCash);
+                }*/
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         builder.setView(layout);
 
+        // --- SUBMIT BUTTON ---
         builder.setPositiveButton("Donate", (dialog, which) -> {
-            String amountStr = input.getText().toString();
-            if(amountStr.isEmpty()) {
+            String amountStr = etAmount.getText().toString();
+            if (amountStr.isEmpty()) {
                 Toast.makeText(getContext(), "Please enter an amount", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            String selectedMethod = methodSpinner.getSelectedItem().toString();
             DonateRequest request = new DonateRequest();
             request.userId = User.currentUser.id;
             request.campaignId = campaign.id;
             request.amount = Double.parseDouble(amountStr);
-            request.method = methodSpinner.getSelectedItem().toString();
-            request.cardNumber = cardInput.getText().toString();
+            request.method = selectedMethod;
+
+            // Validate Card inputs
+            if (selectedMethod.equals("Credit / Debit Card")) {
+                String cardNum = etCardNumber.getText().toString().replaceAll("\\s", "");
+                String expiry = etExpiry.getText().toString();
+                String cvv = etCvv.getText().toString();
+
+                if (cardNum.length() != 16) { Toast.makeText(getContext(), "Card must be 16 digits", Toast.LENGTH_SHORT).show(); return; }
+                if (expiry.length() != 5) { Toast.makeText(getContext(), "Expiry must be MM/YY", Toast.LENGTH_SHORT).show(); return; }
+                if (cvv.length() < 3) { Toast.makeText(getContext(), "Invalid CVV", Toast.LENGTH_SHORT).show(); return; }
+
+                request.cardNumber = cardNum;
+                request.cardExpiry = expiry;
+                request.cardCvv = cvv;
+            }
+            /*else if (selectedMethod.equals("Cash")) {
+                request.reference = "ESF-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+            }*/
 
             ApiService api = ApiClient.getRetrofitInstance().create(ApiService.class);
             api.donate(request).enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     if(response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Donation Successful!", Toast.LENGTH_SHORT).show();
+                        showStyledPopup("✅ Donation Successful", response.body().message, android.graphics.Color.parseColor("#10B981"));
                     } else {
+                        String errorMsg = "Failed to donate";
                         try {
-                            String errorMsg = response.errorBody().string();
-                            Toast.makeText(getContext(), "Failed: " + errorMsg, Toast.LENGTH_LONG).show();
+                            String rawError = response.errorBody().string();
+                            org.json.JSONObject json = new org.json.JSONObject(rawError);
+                            errorMsg = json.optString("message", "Failed to donate");
                         } catch (Exception e) {
-                            Toast.makeText(getContext(), "Failed to donate", Toast.LENGTH_SHORT).show();
+                            errorMsg = "Failed: " + response.code();
                         }
+                        showStyledPopup("⚠️ Error", errorMsg, android.graphics.Color.parseColor("#EF4444"));
                     }
                 }
                 @Override
@@ -163,5 +243,34 @@ public class DonateFragment extends Fragment {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
+    }
+
+    // --- CENTERED PROFESSIONAL POPUP ---
+    private void showStyledPopup(String title, String message, int titleColor) {
+        if (getContext() == null) return;
+
+        TextView messageView = new TextView(getContext());
+        messageView.setText(message);
+        messageView.setTextSize(16f);
+        messageView.setGravity(android.view.Gravity.CENTER);
+        messageView.setTextColor(android.graphics.Color.DKGRAY);
+
+        int padding = (int) (24 * getResources().getDisplayMetrics().density);
+        messageView.setPadding(padding, padding / 2, padding, padding / 2);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(title);
+        builder.setView(messageView);
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            dialog.dismiss();
+            // Refresh the fragment so the campaign raised amount updates
+            getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(android.graphics.Color.parseColor("#1E3A8A"));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
     }
 }

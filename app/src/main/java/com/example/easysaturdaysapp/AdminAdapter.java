@@ -15,10 +15,11 @@ public class AdminAdapter extends FragmentStateAdapter {
             case 1: return new AdminUsersFragment();
             case 2: return new AdminDonationsFragment();
             case 3: return new AdminReportsFragment();
+            case 4: return new AdminRequestsFragment();
             default: return new AdminCampaignsFragment();
         }
     }
 
     @Override
-    public int getItemCount() { return 4; }
+    public int getItemCount() { return 5; }
 }

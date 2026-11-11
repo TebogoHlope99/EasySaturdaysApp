@@ -13,6 +13,15 @@ public class User {
     @SerializedName("password")
     public String password;
 
+    @SerializedName("confirmPassword")
+    public String confirmPassword;
+
+    @SerializedName("popia")
+    public boolean popia;
+
+    @SerializedName("terms")
+    public boolean terms;
+
     public String role; // Donor, Volunteer, Both, Admin
     public String phone;
     public String skills;

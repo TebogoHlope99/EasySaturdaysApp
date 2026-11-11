@@ -38,11 +38,16 @@ public class SuperAdminRequestsFragment extends Fragment {
                 if(response.isSuccessful() && response.body() != null) {
                     // Filter to only show Pending requests
                     List<AdminRequest> pending = response.body();
-                    pending.removeIf(r -> !r.status.equals("Pending"));
+
+                    // FIX: Safely check if status is not null before comparing
+                    pending.removeIf(r -> r.status == null || !r.status.equalsIgnoreCase("Pending"));
+
                     recyclerView.setAdapter(new RequestAdapter(pending));
                 }
             }
-            @Override public void onFailure(Call<List<AdminRequest>> call, Throwable t) {}
+            @Override public void onFailure(Call<List<AdminRequest>> call, Throwable t) {
+                Toast.makeText(getContext(), "Failed to load requests", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -58,11 +63,11 @@ public class SuperAdminRequestsFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull VH holder, int position) {
             AdminRequest r = list.get(position);
-            String requesterName = (r.requestedByUser != null) ? r.requestedByUser.firstName : "Unknown Admin";
 
-            holder.tvRequester.setText("Requested by: " + requesterName);
+            // FIX: Use the requestedByUserId since we removed the nested User object
+            holder.tvRequester.setText("Requested by User ID: " + r.requestedByUserId);
 
-            if(r.actionType.equals("CreateAdmin")) {
+            if(r.actionType != null && r.actionType.equals("CreateAdmin")) {
                 holder.tvAction.setText("Action: Create new Admin (" + r.newAdminEmail + ")");
             } else {
                 holder.tvAction.setText("Action: Delete Admin (ID: " + r.targetAdminId + ")");
@@ -98,9 +103,13 @@ public class SuperAdminRequestsFragment extends Fragment {
                 if(response.isSuccessful()) {
                     Toast.makeText(getContext(), isApproved ? "Approved!" : "Rejected!", Toast.LENGTH_SHORT).show();
                     loadRequests(); // Refresh the list
+                } else {
+                    Toast.makeText(getContext(), "Failed to process request", Toast.LENGTH_SHORT).show();
                 }
             }
-            @Override public void onFailure(Call<ApiResponse> call, Throwable t) {}
+            @Override public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

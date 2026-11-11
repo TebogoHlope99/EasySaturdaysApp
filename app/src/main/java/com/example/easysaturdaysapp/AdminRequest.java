@@ -1,14 +1,14 @@
 package com.example.easysaturdaysapp;
 
 public class AdminRequest {
-    public int id;
+    // --- FIELDS TO SEND TO C# ---
     public int requestedByUserId;
-    public String actionType; // CreateAdmin, DeleteAdmin
+    public String actionType;
     public String targetAdminId;
     public String newAdminEmail;
+
+    // --- FIELDS FOR SUPER ADMIN UI DISPLAY (C# will ignore these) ---
+    public int id;
     public String status;
     public String requestedAt;
-
-    // To display the name of the admin who made the request
-    public User requestedByUser;
 }

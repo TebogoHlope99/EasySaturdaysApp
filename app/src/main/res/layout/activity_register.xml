@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAFC">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/create_account" android:textSize="24sp" android:textStyle="bold" android:textColor="#1E3A8A" android:gravity="center" android:layout_marginTop="20dp"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1E3A8A"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
 
         <EditText android:id="@+id/etRegFirstName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/first_name" android:layout_marginTop="16dp"/>
         <EditText android:id="@+id/etRegLastName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/last_name" android:layout_marginTop="8dp"/>
         <EditText android:id="@+id/etRegEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/email" android:inputType="textEmailAddress" android:layout_marginTop="8dp"/>
-        <EditText android:id="@+id/etRegPassword" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/password" android:inputType="textPassword" android:layout_marginTop="8dp"/>
+
+        <!-- Password Field -->
+        <EditText android:id="@+id/etRegPassword" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Password (min 8 chars, 1 Upper, 1 Num)" android:inputType="textPassword" android:layout_marginTop="8dp"/>
+
+        <!-- NEW: Confirm Password Field -->
+        <EditText android:id="@+id/etRegConfirmPassword" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Confirm Password" android:inputType="textPassword" android:layout_marginTop="8dp"/>
+
         <EditText android:id="@+id/etRegPhone" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/phone_e_g_0821234567" android:inputType="phone" android:layout_marginTop="8dp"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/role" android:layout_marginTop="12dp"/>
         <Spinner android:id="@+id/spinnerRole" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"/>
+
+        <!-- NEW: POPIA Checkbox -->
+        <CheckBox android:id="@+id/cbPopia" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="I consent to my data being stored in accordance with POPIA." android:textSize="12sp" android:layout_marginTop="12dp"/>
+
+        <!-- NEW: Terms Checkbox -->
+        <CheckBox android:id="@+id/cbTerms" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="I agree to abide by the foundation's Code of Conduct." android:textSize="12sp"/>
 
         <Button android:id="@+id/btnRegister" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/register" android:backgroundTint="#10B981" android:layout_marginTop="20dp"/>
         <TextView android:id="@+id/tvGoToLogin" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/already_have_an_account_login" android:textColor="#1E3A8A" android:gravity="center" android:layout_marginTop="16dp"/>

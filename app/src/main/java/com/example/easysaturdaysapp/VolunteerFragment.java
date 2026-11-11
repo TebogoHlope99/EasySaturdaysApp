@@ -2,6 +2,7 @@ package com.example.easysaturdaysapp;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,7 @@ public class VolunteerFragment extends Fragment {
             Campaign c = list.get(position);
             holder.title.setText(c.title);
             holder.desc.setText(c.description);
-            holder.stats.setText("Sign up for a shift"); // Custom text
+            holder.stats.setText("Sign up for a shift");
 
             holder.itemView.setOnClickListener(v -> showShiftDialog(c));
         }
@@ -92,12 +93,29 @@ public class VolunteerFragment extends Fragment {
         layout.setOrientation(android.widget.LinearLayout.VERTICAL);
         layout.setPadding(50, 40, 50, 10);
 
-        // DISCLAIMER
-        android.widget.TextView disclaimer = new android.widget.TextView(getContext());
-        disclaimer.setText("⚠️ Warning: You cannot cancel a shift less than 24 hours before it starts.");
-        disclaimer.setTextColor(android.graphics.Color.RED);
-        disclaimer.setPadding(0, 0, 0, 20);
-        layout.addView(disclaimer);
+        // --- DISCLAIMER HEADER ---
+        android.widget.TextView disclaimerTitle = new android.widget.TextView(getContext());
+        disclaimerTitle.setText("⚠️ Disclaimer");
+        disclaimerTitle.setTextColor(android.graphics.Color.RED);
+        disclaimerTitle.setTextSize(16f);
+        disclaimerTitle.setTypeface(null, android.graphics.Typeface.ITALIC);
+        disclaimerTitle.setGravity(android.view.Gravity.CENTER);
+        disclaimerTitle.setPadding(0, 0, 0, 5);
+        layout.addView(disclaimerTitle);
+
+        // --- DISCLAIMER TEXT ---
+        android.widget.TextView disclaimerText = new android.widget.TextView(getContext());
+        // UPDATED: Clear text about today's date and 24-hour cancellation
+        disclaimerText.setText("You must book a shift at least 1 day in advance (no same-day bookings). You cannot cancel a shift less than 24 hours before it starts.");
+        disclaimerText.setTextColor(android.graphics.Color.DKGRAY);
+        disclaimerText.setTextSize(14f);
+        disclaimerText.setTypeface(null, Typeface.BOLD);
+        disclaimerText.setGravity(android.view.Gravity.CENTER);
+        disclaimerText.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+        disclaimerText.setPadding(0, 0, 0, 20);
+        layout.addView(disclaimerText);
 
         // 1. Date Picker Button
         final android.widget.Button btnDate = new android.widget.Button(getContext());
@@ -105,11 +123,19 @@ public class VolunteerFragment extends Fragment {
         final String[] selectedDate = {""};
         btnDate.setOnClickListener(v -> {
             Calendar c = Calendar.getInstance();
-            new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
+
+            // FIX: Prevent today and past dates. Set min date to TOMORROW.
+            c.add(Calendar.DAY_OF_MONTH, 1);
+
+            DatePickerDialog dpd = new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
                 // Format to yyyy-MM-dd for C#
                 selectedDate[0] = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
                 btnDate.setText("Date: " + selectedDate[0]);
-            }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+
+            // Disable past dates and today
+            dpd.getDatePicker().setMinDate(c.getTimeInMillis());
+            dpd.show();
         });
         layout.addView(btnDate);
 
@@ -139,17 +165,20 @@ public class VolunteerFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     if(response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Shift Signed Up!", Toast.LENGTH_SHORT).show();
+                        showStyledPopup("✅ Success", "Shift Signed Up!", android.graphics.Color.parseColor("#10B981"));
                     } else {
-                        // Show error from C# (e.g., "You already have a shift on this day")
+                        String errorMsg = "Failed to sign up";
                         try {
-                            String errorMsg = response.errorBody().string();
-                            Toast.makeText(getContext(), "Failed: " + errorMsg, Toast.LENGTH_LONG).show();
+                            String rawError = response.errorBody().string();
+                            org.json.JSONObject json = new org.json.JSONObject(rawError);
+                            errorMsg = json.optString("message", "Failed to sign up");
                         } catch (Exception e) {
-                            Toast.makeText(getContext(), "Failed to sign up", Toast.LENGTH_SHORT).show();
+                            errorMsg = "Failed: " + response.code();
                         }
+                        showStyledPopup("⚠️ Error", errorMsg, android.graphics.Color.parseColor("#EF4444"));
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
                     Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
@@ -159,5 +188,34 @@ public class VolunteerFragment extends Fragment {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
+    }
+
+    private void showStyledPopup(String title, String message, int titleColor) {
+        if (getContext() == null) return;
+
+        // 1. Create a centered TextView for the message
+        TextView messageView = new TextView(getContext());
+        messageView.setText(message);
+        messageView.setTextSize(16f);
+        messageView.setGravity(android.view.Gravity.CENTER);
+        messageView.setTextColor(android.graphics.Color.DKGRAY);
+
+        // Add padding so it doesn't touch the edges
+        int padding = (int) (24 * getResources().getDisplayMetrics().density);
+        messageView.setPadding(padding, padding / 2, padding, padding / 2);
+
+        // 2. Build the AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(title);
+        builder.setView(messageView);
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+
+        // 3. Show the dialog and style the title/button
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Style the title color after showing
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(android.graphics.Color.parseColor("#1E3A8A"));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
     }
 }

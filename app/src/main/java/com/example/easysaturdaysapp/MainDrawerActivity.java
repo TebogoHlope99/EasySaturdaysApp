@@ -35,12 +35,26 @@ public class MainDrawerActivity extends AppCompatActivity implements NavigationV
 
         applyRolePermissions(navigationView);
 
+        // --- FIX: ROBUST DEFAULT FRAGMENT LOGIC ---
         if (savedInstanceState == null) {
-            // Default page based on role
-            if (User.currentUser != null && User.currentUser.role.equals("SuperAdmin")) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SuperAdminFragment()).commit();
+            if (User.currentUser != null) {
+                String role = User.currentUser.role != null ? User.currentUser.role : "";
+
+                // If Super Admin, load Super Admin Panel
+                if (role.equalsIgnoreCase("SuperAdmin")) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SuperAdminFragment()).commit();
+                }
+                // If normal Admin, load Admin Panel
+                else if (role.equalsIgnoreCase("Admin")) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AdminFragment()).commit();
+                }
+                // If Donor, Volunteer, or Both, load Dashboard
+                else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
+                }
             } else {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
+                // If user is null, go back to Login
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             }
         }
 
@@ -59,30 +73,28 @@ public class MainDrawerActivity extends AppCompatActivity implements NavigationV
 
     private void applyRolePermissions(NavigationView navigationView) {
         if (User.currentUser == null) return;
-        String role = User.currentUser.role;
+        String role = User.currentUser.role != null ? User.currentUser.role : "";
 
         MenuItem donateItem = navigationView.getMenu().findItem(R.id.nav_donate);
         MenuItem volunteerItem = navigationView.getMenu().findItem(R.id.nav_volunteer);
         MenuItem adminItem = navigationView.getMenu().findItem(R.id.nav_admin);
         MenuItem superAdminItem = navigationView.getMenu().findItem(R.id.nav_super_admin);
 
-        // Hide everything by default for non-admins
-        if (!role.equals("Admin") && !role.equals("SuperAdmin")) {
-            adminItem.setVisible(false);
-            superAdminItem.setVisible(false);
+        if (!role.equalsIgnoreCase("Admin") && !role.equalsIgnoreCase("SuperAdmin")) {
+            if(adminItem != null) adminItem.setVisible(false);
+            if(superAdminItem != null) superAdminItem.setVisible(false);
         }
 
-        if (role.equals("Volunteer")) {
-            donateItem.setVisible(false);
-        } else if (role.equals("Donor")) {
-            volunteerItem.setVisible(false);
-        } else if (role.equals("Admin")) {
-            superAdminItem.setVisible(false); // Admins don't see Super Admin panel
-        } else if (role.equals("SuperAdmin")) {
-            adminItem.setVisible(false); // SuperAdmins use their own panel
-            // By default, hide volunteer/donate for SuperAdmin if they don't have those roles
-            donateItem.setVisible(false);
-            volunteerItem.setVisible(false);
+        if (role.equalsIgnoreCase("Volunteer")) {
+            if(donateItem != null) donateItem.setVisible(false);
+        } else if (role.equalsIgnoreCase("Donor")) {
+            if(volunteerItem != null) volunteerItem.setVisible(false);
+        } else if (role.equalsIgnoreCase("Admin")) {
+            if(superAdminItem != null) superAdminItem.setVisible(false);
+        } else if (role.equalsIgnoreCase("SuperAdmin")) {
+            if(adminItem != null) adminItem.setVisible(false);
+            if(donateItem != null) donateItem.setVisible(false);
+            if(volunteerItem != null) volunteerItem.setVisible(false);
         }
     }
 

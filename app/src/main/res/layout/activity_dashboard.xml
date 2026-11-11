@@ -113,23 +113,5 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"/>
 
-        <Button
-            android:id="@+id/btnEditProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit Profile"
-            android:backgroundTint="#1E3A8A"
-            android:layout_marginTop="24dp"/>
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:backgroundTint="#EF4444"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
-
-
     </LinearLayout>
 </ScrollView>

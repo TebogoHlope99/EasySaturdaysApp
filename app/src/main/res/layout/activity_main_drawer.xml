@@ -3,26 +3,101 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_light">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- 1. GLOBAL HEADER -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#1E3A8A"
-            app:titleTextColor="#FFFFFF"/>
+            android:background="@color/primary"
+            app:titleTextColor="@color/white"
+            app:title="EasySaturdays"/>
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <!-- 2. SCROLLABLE CONTENT (Hero + Fragment) -->
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- HERO SECTION (Always visible) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Empowering Tembisa Together"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Join The Easy Saturdays Foundation in driving social upliftment through community support, education, and youth empowerment in Ekurhuleni."
+                        android:textColor="#E2E8F0"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp"/>
+                </LinearLayout>
+
+                <!-- DYNAMIC CONTENT (Dashboard, Donate, Admin, etc.) -->
+                <FrameLayout
+                    android:id="@+id/fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="400dp"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- 3. GLOBAL FOOTER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home  |  About Us  |  Contact"
+                android:textColor="@color/secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="© 2026 The Easy Saturdays Foundation. All rights reserved."
+                android:textColor="#E2E8F0"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
+    <!-- NAVIGATION DRAWER -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

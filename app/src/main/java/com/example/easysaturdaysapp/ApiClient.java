@@ -6,7 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.util.concurrent.TimeUnit;
 
 public class ApiClient {
-    // Keep your port number exactly as it is
     private static final String BASE_URL = "https://easysaturdays-g4a0hhbegyhmbkhz.southafricanorth-01.azurewebsites.net";
     private static Retrofit retrofit;
 

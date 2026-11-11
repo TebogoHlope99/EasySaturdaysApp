@@ -28,9 +28,6 @@ public class DashboardActivity extends AppCompatActivity {
         TextView tvHours = findViewById(R.id.tvHours);
         TextView tvUpcoming = findViewById(R.id.tvUpcomingShifts);
 
-        Button btnEditProfile = findViewById(R.id.btnEditProfile);
-        Button btnLogout = findViewById(R.id.btnLogout);
-
         if(currentUser != null) {
             tvWelcome.setText("Welcome, " + currentUser.firstName + "!");
 
@@ -52,14 +49,5 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             });
         }
-
-        btnEditProfile.setOnClickListener(v -> startActivity(new Intent(DashboardActivity.this, ProfileActivity.class)));
-
-        btnLogout.setOnClickListener(v -> {
-            currentUserId = 0;
-            currentUser = null;
-            startActivity(new Intent(DashboardActivity.this, MainActivity.class));
-            finish();
-        });
     }
 }
