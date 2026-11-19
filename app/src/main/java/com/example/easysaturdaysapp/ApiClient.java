@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.util.concurrent.TimeUnit;
 
 public class ApiClient {
-    private static final String BASE_URL = "https://easysaturdays-g4a0hhbegyhmbkhz.southafricanorth-01.azurewebsites.net";
+    private static final String BASE_URL = "https://easysaturdays-g4a0hhbegyhmbkhz.southafricanorth-01.azurewebsites.net/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofitInstance() {

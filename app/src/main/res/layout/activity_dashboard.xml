@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#F8FAFC">
 
-    <!-- Removed the LinearLayout Header from here -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,17 +99,25 @@
                     android:orientation="vertical"
                     android:padding="16dp"
                     android:gravity="center">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="UPCOMING SHIFTS" android:textSize="10sp" android:textColor="#64748B"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total SHIFTS" android:textSize="10sp" android:textColor="#64748B"/>
                     <TextView android:id="@+id/tvUpcomingShifts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="20sp" android:textStyle="bold" android:textColor="#1E3A8A"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </GridLayout>
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your Upcoming Shifts" android:textStyle="bold" android:textSize="18sp" android:layout_marginTop="24dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Volunteer Schedule"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="24dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shiftsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
+            android:nestedScrollingEnabled="false"
             android:layout_marginTop="8dp"/>
 
     </LinearLayout>
